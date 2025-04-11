@@ -1,0 +1,20 @@
+uri: 'https://raw.githubusercontent.com/zygo-be/rosdep-manifest/main/rosdep/empty.tar'
+md5sum: 578ad3648be7e297a751874684166651
+install-script: |
+  #!/usr/bin/env bash
+  set -e
+  echo "Installing torch==2.2.0+cpu and torchvision==0.17.0+cpu from PyTorch CPU index..."
+  python3 -m pip install --upgrade pip --break-system-packages
+  python3 -m pip install torch==2.2.0+cpu torchvision==0.17.0+cpu --extra-index-url https://download.pytorch.org/whl/cpu --break-system-packages
+  echo "Torch CPU installation complete."
+check-presence-script: |
+  #!/usr/bin/env bash
+  torch_version=$(python3 -m pip show torch 2>/dev/null | grep ^Version | awk '{print $2}')
+  vision_version=$(python3 -m pip show torchvision 2>/dev/null | grep ^Version | awk '{print $2}')
+  if [[ "$torch_version" == "2.2.0+cpu" && "$vision_version" == "0.17.0+cpu" ]]; then
+    echo "Torch and torchvision installed with correct versions"
+    exit 0
+  else
+    echo "Torch or torchvision not installed or wrong version"
+    exit 1
+  fi
