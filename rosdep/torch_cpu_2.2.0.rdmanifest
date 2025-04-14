@@ -4,7 +4,6 @@ install-script: |
   #!/usr/bin/env bash
   set -e
   echo "Installing torch==2.2.0+cpu and torchvision==0.17.0+cpu from PyTorch CPU index..."
-  python3 -m pip install --upgrade pip --break-system-packages
   python3 -m pip install torch==2.2.0+cpu torchvision==0.17.0+cpu --extra-index-url https://download.pytorch.org/whl/cpu --break-system-packages
   echo "Torch CPU installation complete."
 check-presence-script: |
