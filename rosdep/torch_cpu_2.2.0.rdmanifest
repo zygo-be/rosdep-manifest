@@ -19,8 +19,6 @@ install-script: |
     echo "pip not found."
     _run_as_root apt-get update
     _run_as_root apt-get install -y python3-pip
-  else
-    echo "pip is already installed."
   fi
 
   # --- Install Torch CPU packages ---
