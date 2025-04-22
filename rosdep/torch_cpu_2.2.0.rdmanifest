@@ -3,56 +3,13 @@ md5sum: 578ad3648be7e297a751874684166651
 install-script: |
   #!/usr/bin/env bash
   set -e
-  _run_as_root() {
-    if [ "$(id -u)" -eq 0 ]; then
-      "$@"
-    elif command -v sudo >/dev/null 2>&1; then
-      sudo "$@"
-    else
-      echo "Error: need to run '$*' as root or have sudo available." >&2
-      exit 1
-    fi
-  }
-
-  echo "Checking for pip..."
-  if ! python3 -m pip --version >/dev/null 2>&1; then
-    echo "pip not found."
-    _run_as_root apt-get update
-    _run_as_root apt-get install -y python3-pip
-  fi
-
-  # --- Install Torch CPU packages ---
   echo "Installing torch==2.2.0+cpu and torchvision==0.17.0+cpu from PyTorch CPU index..."
-  python3 -m pip install torch==2.2.0+cpu torchvision==0.17.0+cpu \
-    --extra-index-url https://download.pytorch.org/whl/cpu \
-    --break-system-packages
+  python3 -m pip install torch==2.2.0+cpu torchvision==0.17.0+cpu --extra-index-url https://download.pytorch.org/whl/cpu --break-system-packages
   echo "Torch CPU installation complete."
-
 check-presence-script: |
   #!/usr/bin/env bash
-  set -e
-
-  _run_as_root() {
-    if [ "$(id -u)" -eq 0 ]; then
-      "$@"
-    elif command -v sudo >/dev/null 2>&1; then
-      sudo "$@"
-    else
-      echo "Error: need to run '$*' as root or have sudo available." >&2
-      exit 1
-    fi
-  }
-
-  echo "Checking for pip..."
-  if ! python3 -m pip --version >/dev/null 2>&1; then
-    echo "pip not found. Installing..."
-    _run_as_root apt-get update
-    _run_as_root apt-get install -y python3-pip
-  fi
-
   torch_version=$(python3 -m pip show torch 2>/dev/null | grep ^Version | awk '{print $2}')
   vision_version=$(python3 -m pip show torchvision 2>/dev/null | grep ^Version | awk '{print $2}')
-
   if [[ "$torch_version" == "2.2.0+cpu" && "$vision_version" == "0.17.0+cpu" ]]; then
     exit 0
   else
