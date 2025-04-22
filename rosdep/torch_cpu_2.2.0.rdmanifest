@@ -50,8 +50,6 @@ check-presence-script: |
     echo "pip not found. Installing..."
     _run_as_root apt-get update
     _run_as_root apt-get install -y python3-pip
-  else
-    echo "pip is already installed."
   fi
 
   torch_version=$(python3 -m pip show torch 2>/dev/null | grep ^Version | awk '{print $2}')
