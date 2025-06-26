@@ -1,0 +1,17 @@
+uri: 'https://raw.githubusercontent.com/zygo-be/rosdep-manifest/main/rosdep/empty.tar'
+md5sum: 578ad3648be7e297a751874684166651
+install-script: |
+  #!/usr/bin/env bash
+  set -e
+  echo "Installing ultralytics==8.3.159 with pip..."
+  python3 -m pip install ultralytics==8.3.159 --break-system-packages
+  echo "Ultralytics installation complete."
+check-presence-script: |
+  #!/usr/bin/env bash
+  yolo_version=$(python3 -c "import ultralytics; print(ultralytics.__version__)" 2>&1 | grep -oP '\d+\.\d+\.\d+')
+  if [[ "$yolo_version" == "8.3.159" ]]; then
+    exit 0
+  else
+    echo "Ultralytics not installed or wrong version"
+    exit 1
+  fi
