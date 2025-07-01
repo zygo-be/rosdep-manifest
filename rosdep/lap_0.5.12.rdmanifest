@@ -1,0 +1,17 @@
+uri: 'https://raw.githubusercontent.com/zygo-be/rosdep-manifest/main/rosdep/empty.tar'
+md5sum: 578ad3648be7e297a751874684166651
+install-script: |
+  #!/usr/bin/env bash
+  set -e
+  echo "Installing lap==0.5.12 with pip..."
+  python3 -m pip install lap==0.5.12 --break-system-packages
+  echo "Lap installation complete."
+check-presence-script: |
+  #!/usr/bin/env bash
+  lap_version=$(python3 -c "import lap; print(lap.__version__)" 2>&1 | grep -oP '\d+\.\d+\.\d+')
+  if [[ "$lap_version" == "0.5.12" ]]; then
+    exit 0
+  else
+    echo "Lap not installed or wrong version"
+    exit 1
+  fi
