@@ -1,0 +1,27 @@
+uri: 'https://raw.githubusercontent.com/zygo-be/rosdep-manifest/main/rosdep/empty.tar'
+md5sum: 578ad3648be7e297a751874684166651
+install-script: |
+  #!/usr/bin/env bash
+  set -e
+
+  echo "Ensuring ~/.local/bin is on PATH via ~/.bashrc..."
+  if ! grep -q 'export PATH=\$PATH:\$HOME/.local/bin' "$HOME/.bashrc"; then
+    echo 'export PATH=$PATH:$HOME/.local/bin' >> "$HOME/.bashrc"
+  fi
+
+  export PATH="$PATH:$HOME/.local/bin"
+
+  echo "Installing ament_ruff via pip3..."
+  pip3 install ament_ruff --user --break-system-packages
+
+  echo "ament_ruff installation complete."
+check-presence-script: |
+  #!/usr/bin/env bash
+  export PATH="$PATH:$HOME/.local/bin"
+
+  if command -v ament_ruff >/dev/null 2>&1; then
+    exit 0
+  else
+    echo "ament_ruff not found in PATH"
+    exit 1
+  fi
